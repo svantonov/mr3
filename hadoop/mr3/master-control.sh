@@ -38,6 +38,8 @@ fi
 # Hive 4 uses Protobuf 3.
 # As a result, we may see:
 #   Error: tried to access field com.google.protobuf.AbstractMessage.memoizedSize from class com.datamonad.mr3.client.DAGClientHandlerProtocolRPC$GetAllDagsRequestProto
-# To avoid the conflict, remove Protobuf 2 jar files (e.g., protobuf-java-2.5.0.jar) in the classpath.
+# If you see the conflict, remove Protobuf 2 jar files (e.g., protobuf-java-2.5.0.jar) in the classpath.
+
+export HADOOP_USER_CLASSPATH_FIRST=true
 
 exec $HADOOP jar $JAR $CLASS "$@"
