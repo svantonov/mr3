@@ -262,7 +262,7 @@
 
 <property>
   <name>tez.runtime.shuffle.parallel.copies</name>
-  <value>10</value>
+  <value>5</value>
 </property>
 
 <property>
@@ -287,7 +287,12 @@
 
 <property>
   <name>tez.runtime.pipelined-shuffle.enabled</name>
-  <value>false</value>
+  <value>true</value>
+</property>
+
+<property>
+  <name>tez.runtime.pipelined-shuffle.ordered.enabled</name>
+  <value>true</value>
 </property>
 
 <property>
@@ -307,7 +312,7 @@
 
 <property>
   <name>tez.runtime.use.free.memory.writer.output</name>
-  <value>false</value>
+  <value>true</value>
 </property>
 
 <property>

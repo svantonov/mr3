@@ -536,6 +536,11 @@
 </property>
 
 <property>
+  <name>mr3.ui.timeline-service.leveldb-timeline-store.dir.umask</name>
+  <value>0770</value>
+</property>
+
+<property>
   <name>mr3.ui.server.enable.cors</name>
   <value>true</value>
 </property>

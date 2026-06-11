@@ -155,6 +155,7 @@
 <property>
   <name>hive.exec.reducers.max</name>
   <value>1009</value>
+  <description>For running multiple queries concurrently, set to a smaller value (e.g., 509).</description>
 </property>
 
 <property>
@@ -581,11 +582,6 @@
 <property>
   <name>hive.mr3.use.daemon.shufflehandler</name>
   <value>9</value>
-</property>
-
-<property>
-  <name>hive.mr3.delete.vertex.local.directory</name>
-  <value>false</value>
 </property>
 
 <property>
