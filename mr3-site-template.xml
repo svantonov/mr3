@@ -597,6 +597,15 @@
 </property>
 
 <property>
+  <name>mr3.dag.taskattempt.queue.use.hint.rack</name>
+  <value>false</value>
+  <description>
+    true: use rack labels for scheduling hints.
+    false: do not use rack labels for scheduling hints.
+  </description>
+</property>
+
+<property>
   <name>mr3.vertex.high.task.priority.fraction</name>
   <value>0.05</value>
   <description>

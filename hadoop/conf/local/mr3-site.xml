@@ -48,6 +48,11 @@
 </property>
 
 <property>
+  <name>mr3.dag.recovery.enabled</name>
+  <value>false</value>
+</property>
+
+<property>
   <name>mr3.am.permit.custom.user.class</name>
   <value>true</value>
 </property>

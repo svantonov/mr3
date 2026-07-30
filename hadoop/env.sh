@@ -195,13 +195,13 @@ LOG_LEVEL=INFO
 #
 
 # MR3 revision number
-MR3_REV=2.0
+MR3_REV=3.0
 
 # Tez-MR3 revision number
 TEZ_REV=0.9.1.mr3.${MR3_REV}
 
 # Hive-MR3 revision number
-HIVE_REV=4.0.0
+HIVE_REV=4.2.0
 
 #
 # Step 10. High availability (optional)

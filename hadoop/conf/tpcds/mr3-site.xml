@@ -67,6 +67,11 @@
 </property>
 
 <property>
+  <name>mr3.dag.recovery.enabled</name>
+  <value>false</value>
+</property>
+
+<property>
   <name>mr3.am.task.retry.on.fatal.error</name>
   <value>true</value>
 </property>

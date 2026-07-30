@@ -33,6 +33,11 @@
 </property>
 
 <property>
+  <name>mr3.dag.recovery.enabled</name>
+  <value>false</value>
+</property>
+
+<property>
   <name>mr3.am.task.retry.on.fatal.error</name>
   <value>true</value>
 </property>
@@ -355,21 +360,6 @@
 <property>
   <name>mr3.k8s.liveness.probe.period.secs</name>
   <value>30</value>
-</property>
-
-<property>
-  <name>mr3.app.history.logging.enabled</name>
-  <value>false</value>
-</property>
-
-<property>
-  <name>mr3.dag.history.logging.enabled</name>
-  <value>false</value>
-</property>
-
-<property>
-  <name>mr3.task.history.logging.enabled</name>
-  <value>false</value>
 </property>
 
 <property>
