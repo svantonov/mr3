@@ -28,7 +28,7 @@ function print_usage {
     echo " --init-schema                  Initialize the database schema"
     hive_setup_print_usage_hiveconf
     echo " <Metastore option>             Add a Metastore option; may be repeated at the end"
-    echo "" 
+    echo ""
 }
 
 function warning {
@@ -44,7 +44,7 @@ function error {
 function metastore_service_parse_args {
     if [ $# = 0 ]; then
       print_usage
-      exit 1 
+      exit 1
     fi
 
     START_METASTORE=false
@@ -103,17 +103,19 @@ function main {
     hive_setup_parse_args_common $@
     metastore_service_parse_args $REMAINING_ARGS
 
-    if [ -e $BASE_DIR/lib/mysql-connector*.jar ]; then
-      echo "A MySQL connector exists"
-    else
-      WGET_URL=https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.28.tar.gz
-      echo "Downloading a MySQL connector: $WGET_URL"
-      mkdir -p $BASE_DIR/lib/
-      pushd $BASE_DIR/lib/
-      wget $WGET_URL
-      tar --strip-components=1 -zxf mysql-connector-java-8.0.28.tar.gz mysql-connector-java-8.0.28/mysql-connector-java-8.0.28.jar
-      rm -f mysql-connector-java-8.0.28.tar.gz
-      popd
+    if [[ "$HIVE_METASTORE_DB_TYPE" == "mysql" ]]; then
+      if [ -e $BASE_DIR/lib/mysql-connector*.jar ]; then
+        echo "A MySQL connector exists"
+      else
+        WGET_URL=https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.28.tar.gz
+        echo "Downloading a MySQL connector: $WGET_URL"
+        mkdir -p $BASE_DIR/lib/
+        pushd $BASE_DIR/lib/
+        wget $WGET_URL
+        tar --strip-components=1 -zxf mysql-connector-java-8.0.28.tar.gz mysql-connector-java-8.0.28/mysql-connector-java-8.0.28.jar
+        rm -f mysql-connector-java-8.0.28.tar.gz
+        popd
+      fi
     fi
 
     metastore_service_init
@@ -122,7 +124,7 @@ function main {
     out_file="$OUT/out-metastore.txt"
 
     hive_setup_config_hive_logs "$log_dir"
-    hive_setup_init_run_configs $LOCAL_MODE 
+    hive_setup_init_run_configs $LOCAL_MODE
 
     return_code=0
 
