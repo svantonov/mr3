@@ -405,12 +405,12 @@
 
 <property>
   <name>javax.jdo.option.ConnectionUserName</name>
-  <value>root</value>
+  <value>${hive.database.user}</value>
 </property>
 
 <property>
   <name>javax.jdo.option.ConnectionPassword</name>
-  <value>password</value>
+  <value>${hive.database.password}</value>
 </property>
 
 <property>

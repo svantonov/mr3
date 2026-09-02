@@ -335,9 +335,11 @@ function hive_setup_metastore_update_hadoop_opts {
 -Dhive.database.jdbc.type=$HIVE_METASTORE_DB_JDBC_TYPE \
 -Dhive.database.jdbc.driver=$HIVE_METASTORE_DB_JDBC_DRIVER \
 -Dhive.database.host=$HIVE_DATABASE_HOST \
+-Dhive.database.user=$HIVE_DATABASE_USER \
+-Dhive.database.password=$HIVE_DATABASE_PASSWORD \
+-Dhive.database.name=$HIVE_DATABASE_NAME \
 -Dhive.metastore.host=$HIVE_METASTORE_HOST \
 -Dhive.metastore.port=$HIVE_METASTORE_PORT \
--Dhive.database.name=$HIVE_DATABASE_NAME \
 -Dhive.local.data=$HIVE_LOCAL_DATA \
 -Dhive.warehouse.dir=$HIVE_WAREHOUSE_DIR \
 -Dhive.scratch.dir=$HIVE_SCRATCH_DIR \
