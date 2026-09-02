@@ -58,7 +58,7 @@ function hive_setup_init {
     HCATALOG_JARS=$HIVE_HOME/hcatalog/share/hcatalog
 
     # updated later in hive_setup_update_conf_dir()
-    # do not include HIVE_CONF_DIR in HIVE_CLASSPATH 
+    # do not include HIVE_CONF_DIR in HIVE_CLASSPATH
     export HIVE_CONF_DIR=$HIVE_HOME/conf
     # do not include HIVE_JARS/* because it will be added when interpreting HIVE_HOME
     export HIVE_CLASSPATH=$HCATALOG_CONF_DIR:$HCATALOG_JARS/*
@@ -66,6 +66,14 @@ function hive_setup_init {
     export PATH=$HIVE_BIN:$PATH
 
     export HADOOP_CLIENT_OPTS="$HADOOP_CLIENT_OPTS -Dlog4j.configurationFile=hive-log4j2.properties"
+
+    if [[ "$HIVE_METASTORE_DB_TYPE" == "mysql" ]]; then
+        HIVE_METASTORE_DB_JDBC_TYPE=mysql
+        HIVE_METASTORE_DB_JDBC_DRIVER=com.mysql.jdbc.Driver
+    elif [[ "$HIVE_METASTORE_DB_TYPE" == "postgres" ]]; then
+        HIVE_METASTORE_DB_JDBC_TYPE=postgresql
+        HIVE_METASTORE_DB_JDBC_DRIVER=org.postgresql.Driver
+    fi
 }
 
 function hive_setup_init_heapsize_mb {
@@ -83,15 +91,15 @@ function hive_setup_init_output_dir {
 
     mkdir -p $output_dir > /dev/null 2>&1
 
-    hive_setup_create_output_dir $output_dir 
+    hive_setup_create_output_dir $output_dir
 
     OUT_CONF=$OUT/conf
     mkdir -p $OUT_CONF > /dev/null 2>&1
 
     cp $BASE_DIR/env.sh $OUT_CONF
-    hadoop_setup_update_conf_dir $OUT_CONF 
+    hadoop_setup_update_conf_dir $OUT_CONF
     hive_setup_update_conf_dir $OUT_CONF
-    common_setup_update_conf_dir $OUT_CONF 
+    common_setup_update_conf_dir $OUT_CONF
 }
 
 function hive_setup_create_output_dir {
@@ -117,15 +125,15 @@ function hive_setup_update_conf_dir {
     # export HIVE_CLASSPATH=$HIVE_CONF_DIR:$HIVE_CLASSPATH
 
     # TEZ_CONF_DIR should be set to prevent 'hive' from adding a default path (/etc/tez/conf) to CLASSPATH
-    # suffices to set it to ":" because HIVE_CONF_DIR already includes $conf_dir 
+    # suffices to set it to ":" because HIVE_CONF_DIR already includes $conf_dir
     export TEZ_CONF_DIR=":"
 
-    # similarly for HBASE_CONF_DIR 
+    # similarly for HBASE_CONF_DIR
     export HBASE_CONF_DIR=":"
 }
 
 #
-# hive_setup_config_hive_logs 
+# hive_setup_config_hive_logs
 #
 
 function hive_setup_config_hive_logs {
@@ -136,9 +144,9 @@ function hive_setup_config_hive_logs {
     export HIVE_OPTS="--hiveconf hive.querylog.location=$output_dir $HIVE_OPTS"
 
     # Cf. HIVE-19886
-    # HADOOP_OPTS should be updated because some LOG objects may be initialized before HiveServer2.main() calls 
-    # LogUtils.initHiveLog4j(), e.g., conf.HiveConf.LOG. Without updating HADOOP_OPTS, these LOG objects send 
-    # their output to hive.log in a default directory, e.g., /tmp/gitlab-runner/hive.log, and we end up with 
+    # HADOOP_OPTS should be updated because some LOG objects may be initialized before HiveServer2.main() calls
+    # LogUtils.initHiveLog4j(), e.g., conf.HiveConf.LOG. Without updating HADOOP_OPTS, these LOG objects send
+    # their output to hive.log in a default directory, e.g., /tmp/gitlab-runner/hive.log, and we end up with
     # two hive.log files.
     export HADOOP_OPTS="$HADOOP_OPTS -Dhive.log.dir=$output_dir -Dhive.log.file=$log_filename"
 }
@@ -150,8 +158,8 @@ function hive_setup_config_hive_logs {
 function hive_setup_init_run_configs {
     local_mode=$1
 
-    hive_setup_update_hadoop_opts $local_mode 
-    hive_setup_metastore_update_hadoop_opts 
+    hive_setup_update_hadoop_opts $local_mode
+    hive_setup_metastore_update_hadoop_opts
     hive_setup_config_hadoop_classpath
 }
 
@@ -162,11 +170,14 @@ function hive_setup_update_hadoop_opts {
         export HADOOP_OPTS="$HADOOP_OPTS -Dmr3.root.logger=$LOG_LEVEL,console"
     fi
 
-    mr3_setup_update_hadoop_opts $local_mode 
+    mr3_setup_update_hadoop_opts $local_mode
 }
 
 function hive_setup_metastore_update_hadoop_opts {
    export HADOOP_OPTS="$HADOOP_OPTS \
+-Dhive.database.type=$HIVE_METASTORE_DB_TYPE \
+-Dhive.database.jdbc.type=$HIVE_METASTORE_DB_JDBC_TYPE \
+-Dhive.database.jdbc.driver=$HIVE_METASTORE_DB_JDBC_DRIVER \
 -Dhive.database.host=$HIVE_DATABASE_HOST \
 -Dhive.metastore.host=$HIVE_METASTORE_HOST \
 -Dhive.metastore.port=$HIVE_METASTORE_PORT \
@@ -202,6 +213,9 @@ function hive_setup_metastore_update_hadoop_opts {
 
 function hive_setup_beeline_update_hadoop_opts {
    export HADOOP_OPTS="$HADOOP_OPTS \
+-Dhive.database.type=$HIVE_METASTORE_DB_TYPE \
+-Dhive.database.jdbc.type=$HIVE_METASTORE_DB_JDBC_TYPE \
+-Dhive.database.jdbc.driver=$HIVE_METASTORE_DB_JDBC_DRIVER \
 -Dhive.database.host=$HIVE_DATABASE_HOST \
 -Dhive.metastore.host=$HIVE_METASTORE_HOST \
 -Dhive.metastore.port=$HIVE_METASTORE_PORT \

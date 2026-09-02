@@ -73,6 +73,14 @@ function hive_setup_init {
 
     HIVE_BIN=$HIVE_HOME/bin
     export PATH=$HIVE_BIN:$PATH
+
+    if [[ "$HIVE_METASTORE_DB_TYPE" == "mysql" ]]; then
+        HIVE_METASTORE_DB_JDBC_TYPE=mysql
+        HIVE_METASTORE_DB_JDBC_DRIVER=com.mysql.jdbc.Driver
+    elif [[ "$HIVE_METASTORE_DB_TYPE" == "postgres" ]]; then
+        HIVE_METASTORE_DB_JDBC_TYPE=postgresql
+        HIVE_METASTORE_DB_JDBC_DRIVER=org.postgresql.Driver
+    fi
 }
 
 function hive_setup_init_conf {
@@ -151,7 +159,7 @@ function hive_setup_config_hive_logs {
     export HIVE_OPTS="--hiveconf hive.querylog.location=$output_dir $HIVE_OPTS"
 
     # Cf. HIVE-19886
-    # YARN_OPTS should be updated because some LOG objects may be initialized before HiveServer2.main() calls 
+    # YARN_OPTS should be updated because some LOG objects may be initialized before HiveServer2.main() calls
     # LogUtils.initHiveLog4j(), e.g., conf.HiveConf.LOG. Without updating YARN_OPTS, these LOG objects send their output
     # to hive.log in a default directory, e.g., /tmp/gitlab-runner/hive.log, and we end up with two hive.log files.
     export YARN_OPTS="-Dhive.log.dir=$output_dir -Dhive.log.file=$log_filename"
@@ -248,7 +256,7 @@ function hive_setup_exec_cmd {
 
     if [ $combine = true ]; then
       cmd+=" $combine_out_opts"
-    fi 
+    fi
 
     [ $silent = true ] && cmd+=" $silent_opts" || cmd+=""
 
@@ -285,7 +293,7 @@ function hive_setup_exec_cmd_timed {
     declare combine=${4:-true}
 
     hive_setup_exec_cmd "$cmd" $out_file $silent $combine
-    
+
     return $EXEC_EXIT_CODE
 }
 
@@ -323,6 +331,9 @@ function hive_setup_update_hadoop_opts {
 
 function hive_setup_metastore_update_hadoop_opts {
    export HADOOP_OPTS="$HADOOP_OPTS \
+-Dhive.database.type=$HIVE_METASTORE_DB_TYPE \
+-Dhive.database.jdbc.type=$HIVE_METASTORE_DB_JDBC_TYPE \
+-Dhive.database.jdbc.driver=$HIVE_METASTORE_DB_JDBC_DRIVER \
 -Dhive.database.host=$HIVE_DATABASE_HOST \
 -Dhive.metastore.host=$HIVE_METASTORE_HOST \
 -Dhive.metastore.port=$HIVE_METASTORE_PORT \

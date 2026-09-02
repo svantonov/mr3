@@ -78,7 +78,7 @@
   <name>hive.auto.convert.join.noconditionaltask.size</name>
   <value>4000000000</value>
 </property>
-    
+
 <property>
   <name>hive.auto.convert.sortmerge.join.to.mapjoin</name>
   <value>true</value>
@@ -372,17 +372,17 @@
 
 <property>
   <name>hive.metastore.db.type</name>
-  <value>MYSQL</value>
+  <value>${hive.database.type}</value>
 </property>
 
 <property>
   <name>javax.jdo.option.ConnectionURL</name>
-  <value>jdbc:mysql://${hive.database.host}/${hive.database.name}?createDatabaseIfNotExist=true</value>
+  <value>jdbc:${hive.database.jdbc.type}://${hive.database.host}/${hive.database.name}?createDatabaseIfNotExist=true</value>
 </property>
 
 <property>
   <name>javax.jdo.option.ConnectionDriverName</name>
-  <value>com.mysql.jdbc.Driver</value>
+  <value>${hive.database.jdbc.driver}</value>
 </property>
 
 <property>
@@ -472,15 +472,15 @@
 <property>
   <name>hive.llap.io.threadpool.size</name>
   <value>18</value>
-  <description> 
+  <description>
     hive.llap.io.threadpool.size must be >= # of TaskAttempts running in a ContainerWorker (and hive.llap.daemon.num.executors).
   </description>
 </property>
-    
+
 <property>
   <name>hive.llap.daemon.num.executors</name>
   <value>18</value>
-  <description> 
+  <description>
     Used as an estimate number of Reducers in LlapDecider when no ContainerWorkers are running
   </description>
 </property>
@@ -524,7 +524,7 @@
     Can be set to false if no additional resources are added (other than hive.mr3.aux.jars) and no MR3-compaction is used
   </description>
 </property>
-    
+
 <property>
   <name>hive.mr3.aux.jars</name>
   <value>hive-llap-common-4.2.0.jar,hive-llap-server-4.2.0.jar,hive-llap-tez-4.2.0.jar,hive-iceberg-handler-4.2.0.jar,log4j-1.2-api-2.24.3.jar,orc-core-2.1.2.jar,orc-format-1.1.0.jar,orc-shims-2.1.2.jar,orc-tools-2.1.2.jar</value>
